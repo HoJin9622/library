@@ -17,6 +17,7 @@ const List = styled.li``;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: black;
   padding: ${(props) => (props.title ? '' : '1rem')};
   font-size: ${(props) => (props.title ? '3rem' : '1.8rem')};
   font-weight: ${(props) => (props.title ? 'bold' : '300')};
@@ -25,7 +26,7 @@ const StyledLink = styled(Link)`
 export default () => {
   return (
     <NavContainer>
-      <StyledLink to='/' title>
+      <StyledLink title to='/'>
         Library
       </StyledLink>
       <ListContainer>
