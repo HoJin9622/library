@@ -22,6 +22,7 @@ export default () => {
 
   useEffect(() => {
     axios.get('/api/').then((response) => {
+      console.log(response);
       if (response.data.success) {
         setBooks(response.data.books);
       } else {

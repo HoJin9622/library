@@ -23,19 +23,19 @@ export default () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const variables = {
-      name: Name,
-    };
-
-    console.log(variables);
-
-    axios.get('/api/authors/', variables).then((response) => {
-      if (response.data.success) {
-        setAuthors(response.data.authors);
-      } else {
-        alert('Failed to load authors');
-      }
-    });
+    axios
+      .get('/api/authors/', {
+        params: {
+          name: Name,
+        },
+      })
+      .then((response) => {
+        if (response.data.success) {
+          setAuthors(response.data.authors);
+        } else {
+          alert('Failed to load authors');
+        }
+      });
   };
 
   return (
