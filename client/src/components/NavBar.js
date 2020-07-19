@@ -6,7 +6,7 @@ const NavContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin: 1rem 0 6rem 0;
 `;
 
 const ListContainer = styled.ul`

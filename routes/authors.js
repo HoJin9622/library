@@ -6,7 +6,8 @@ const Book = require('../models/book');
 // All Authors Route
 router.get('/', async (req, res) => {
   let searchOptions = {};
-  if (req.query.name !== null && req.query.name !== '') {
+  let authors;
+  /*   if (req.query.name !== null && req.query.name !== '') {
     searchOptions.name = new RegExp(req.query.name, 'i');
   }
   try {
@@ -14,7 +15,18 @@ router.get('/', async (req, res) => {
     res.render('authors/index', { authors: authors, searchOptions: req.query });
   } catch {
     res.redirect('/');
+  } */
+
+  if (req.query.name !== null && req.query.name !== '') {
+    searchOptions.name = new RegExp(req.query.name, 'i');
   }
+  try {
+    authors = await Author.find(searchOptions);
+  } catch {
+    authors = [];
+  }
+
+  return res.status(200).json({ success: true, authors: authors });
 });
 
 // New Author Route
