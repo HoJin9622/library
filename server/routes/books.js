@@ -141,9 +141,11 @@ async function renderFormPage(res, book, form, hasError = false) {
         params.errorMessage = 'Error Creating Book';
       }
     }
-    res.render(`books/${form}`, params);
-  } catch {
-    res.redirect('/books');
+    /*     res.render(`books/${form}`, params); */
+    res.status(200).json({ success: true, params });
+  } catch (err) {
+    /*     res.redirect('/books'); */
+    res.status(400).json({ success: false, err });
   }
 }
 

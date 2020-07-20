@@ -40,7 +40,7 @@ export default () => {
           <StyledLink to='/books'>Books</StyledLink>
         </List>
         <List>
-          <StyledLink to='/authors/new'>Add Book</StyledLink>
+          <StyledLink to='/books/new'>Add Book</StyledLink>
         </List>
       </ListContainer>
     </NavContainer>
