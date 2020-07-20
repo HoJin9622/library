@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Book = require('../models/book');
 const Author = require('../models/author');
+const { reset } = require('nodemon');
 const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
 
 // All Books Route
@@ -18,12 +19,15 @@ router.get('/', async (req, res) => {
   }
   try {
     const books = await query.exec();
-    res.render('books/index', {
+    /*     res.render('books/index', {
       books: books,
       searchOptions: req.query,
-    });
-  } catch {
-    res.redirect('/');
+    }); */
+    res
+      .status(200)
+      .json({ success: true, books: books, searchOptions: req.query });
+  } catch (err) {
+    res.status(400).json({ success: false, err: err });
   }
 });
 
