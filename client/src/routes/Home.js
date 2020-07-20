@@ -21,8 +21,7 @@ export default () => {
   const [Books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/').then((response) => {
-      console.log(response);
+    axios.get('/api').then((response) => {
       if (response.data.success) {
         setBooks(response.data.books);
       } else {

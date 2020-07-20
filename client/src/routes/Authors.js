@@ -24,7 +24,7 @@ export default () => {
     e.preventDefault();
 
     axios
-      .get('/api/authors/', {
+      .get('/api/authors', {
         params: {
           name: Name,
         },

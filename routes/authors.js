@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   try {
     authors = await Author.find(searchOptions);
     return res.status(200).json({ success: true, authors: authors });
-  } catch {
+  } catch (err) {
     return res.status(400).json({ success: false, err });
   }
 });
@@ -29,14 +29,12 @@ router.post('/', async (req, res) => {
   const author = new Author({
     name: req.body.name,
   });
+
   try {
     const newAuthor = await author.save();
-    res.redirect(`authors/${newAuthor.id}`);
-  } catch {
-    res.render('authors/new', {
-      author: author,
-      errorMessage: 'Error creating Author',
-    });
+    return res.status(200).json({ success: true, authors: newAuthor });
+  } catch (err) {
+    return res.status(400).json({ success: false, err });
   }
 });
 
