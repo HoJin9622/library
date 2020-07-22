@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const methodOverride = require('method-override');
 
@@ -12,7 +13,8 @@ const bookRouter = require('./routes/books');
 
 app.use(methodOverride('_method'));
 app.use(express.static('public'));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {

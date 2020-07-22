@@ -1,9 +1,54 @@
 const express = require('express');
 const router = express.Router();
+const aws = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const multer = require('multer');
+const path = require('path');
+
 const Book = require('../models/book');
 const Author = require('../models/author');
-const { reset } = require('nodemon');
-const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
+
+const s3 = new aws.S3({
+  accessKeyId: '',
+  secretAccessKey: '',
+  Bucket: '',
+});
+
+const profileImgUpload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: '',
+    acl: 'public-read',
+    key: function (req, file, cb) {
+      cb(
+        null,
+        path.basename(file.originalname, path.extname(file.originalname)) +
+          '-' +
+          Date.now() +
+          path.extname(file.originalname)
+      );
+    },
+  }),
+  limits: { fileSize: 2000000 }, // In bytes: 2000000 bytes = 2 MB
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single('profileImage');
+
+// Image type check
+function checkFileType(file, cb) {
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb('Error: Images Only!');
+  }
+}
 
 // All Books Route
 router.get('/', async (req, res) => {
@@ -19,10 +64,6 @@ router.get('/', async (req, res) => {
   }
   try {
     const books = await query.exec();
-    /*     res.render('books/index', {
-      books: books,
-      searchOptions: req.query,
-    }); */
     res
       .status(200)
       .json({ success: true, books: books, searchOptions: req.query });
@@ -37,22 +78,46 @@ router.get('/new', async (req, res) => {
 });
 
 // Create Book Route
-router.post('/', async (req, res) => {
-  const book = new Book({
-    title: req.body.title,
-    author: req.body.author,
-    publishDate: new Date(req.body.publishDate),
-    pageCount: req.body.pageCount,
-    description: req.body.description,
-  });
-  saveCover(book, req.body.cover);
+router.post('/', (req, res) => {
+  console.log(req);
+  profileImgUpload(req, res, (error) => {
+    // console.log( 'requestOkokok', req.file );
+    // console.log( 'error', error );
+    if (error) {
+      console.log('errors', error);
+      res.json({ error: error });
+    } else {
+      // If File not found
+      if (req.file === undefined) {
+        console.log('Error: No File Selected!');
+        res.json('Error: No File Selected');
+      } else {
+        const imageName = req.file.key;
+        const imageLocation = req.file.location;
+        // If Success
+        /*         const book = new Book({
+          title: req.body.title,
+          author: req.body.author,
+          publishDate: new Date(req.body.publishDate),
+          pageCount: req.body.pageCount,
+          description: req.body.description,
+          imageName: req.file.key,
+          imageLocation: req.file.location,
+        }); */
 
-  try {
+        //const newBook = book.save();
+        // Save the file name into database into profile model
+        res.json({ success: true, imageName, imageLocation });
+      }
+    }
+  });
+
+  /*   try {
     const newBook = await book.save();
     res.redirect(`books/${newBook.id}`);
   } catch {
     renderNewPage(res, book, true);
-  }
+  } */
 });
 
 // Show Book Route
