@@ -35,7 +35,12 @@ export default () => {
       <Title>Recently Added</Title>
       <BooksContainer>
         {Books.map((book) => (
-          <BookPoster key={book._id} id={book._id} title={book.title} />
+          <BookPoster
+            key={book._id}
+            id={book._id}
+            title={book.title}
+            coverImagePath={book.coverImagePath}
+          />
         ))}
       </BooksContainer>
     </>

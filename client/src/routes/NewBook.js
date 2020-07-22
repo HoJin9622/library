@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export default () => {
+export default (props) => {
   const [Title, setTitle] = useState('');
-  const [Author, setAuthor] = useState('');
+  const [AuthorId, setAuthorId] = useState('');
   const [Authors, setAuthors] = useState([]);
   const [PublishDate, setPublishDate] = useState('');
   const [PageCount, setPageCount] = useState(1);
@@ -15,6 +15,7 @@ export default () => {
     axios.get('/api/books/new').then((response) => {
       if (response.data.success) {
         setAuthors(response.data.params.authors);
+        setAuthorId(response.data.params.authors[0]._id);
       } else {
         alert('Failed to load books');
       }
@@ -26,7 +27,10 @@ export default () => {
   };
 
   const onAuthorChange = (e) => {
-    setAuthor(e.currentTarget.value);
+    let option = document.getElementById('selectedOption');
+    let selectedId = option.options[option.selectedIndex].id;
+
+    setAuthorId(selectedId);
   };
 
   const onPublishDateChange = (e) => {
@@ -49,7 +53,12 @@ export default () => {
     const data = new FormData();
     // If file selected
     if (Cover) {
-      data.append('profileImage', Cover, Cover.name);
+      data.append('imgFile', Cover, Cover.name);
+      data.append('title', Title);
+      data.append('author', AuthorId);
+      data.append('publishDate', PublishDate);
+      data.append('pageCount', PageCount);
+      data.append('description', Description);
       axios
         .post('/api/books', data, {
           headers: {
@@ -59,31 +68,18 @@ export default () => {
           },
         })
         .then((response) => {
-          if (200 === response.status) {
-            // If file size is larger than expected.
-            if (response.data.error) {
-              if ('LIMIT_FILE_SIZE' === response.data.error.code) {
-                alert('Max size: 2MB, red');
-              } else {
-                console.log(response.data);
-                // If not the given file type
-                alert(response.data.error, 'red');
-              }
-            } else {
-              // Success
-              let fileName = response.data;
-              console.log('fileName', fileName);
-              alert('File Uploaded #3089cf');
-            }
+          if (response.data.success) {
+            alert('성공적으로 추가하였습니다.');
+            setTimeout(() => {
+              props.history.push(`/books/${response.data.books._id}`);
+            }, 2000);
+          } else {
+            alert('업로드에 실패하였습니다.');
           }
-        })
-        .catch((error) => {
-          // If another error
-          alert(error, 'red');
         });
     } else {
       // if file not selected throw error
-      alert('Please upload file, red');
+      alert('파일을 업로드해주세요.');
     }
   };
 
@@ -93,9 +89,9 @@ export default () => {
       <div>Title</div>
       <input type='text' onChange={onTitleChange} value={Title} />
       <div>Author</div>
-      <select onChange={onAuthorChange} value={Author}>
+      <select id='selectedOption' onChange={onAuthorChange}>
         {Authors.map((author) => (
-          <option key={author._id}>{author.name}</option>
+          <option key={author._id} label={author.name} id={author._id} />
         ))}
       </select>
       <div>Publish Date</div>
