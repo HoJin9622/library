@@ -42,12 +42,11 @@ router.get('/:id', async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
     const books = await Book.find({ author: author.id }).limit(6).exec();
-    res.render('authors/show', {
-      author: author,
-      booksByAuthor: books,
-    });
-  } catch {
-    res.redirect('/');
+    res
+      .status(200)
+      .json({ success: true, author: author, booksByAuthor: books });
+  } catch (err) {
+    res.status(400).json({ success: false, err });
   }
 });
 

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 export default ({ id, name }) => {
   return (
     <div>
-      <Link to={`/authors/${id}`}>{name}</Link>
-      <button>View</button>
+      <div>{name}</div>
+      <Link to={`/authors/${id}`}>View</Link>
       <button>Edit</button>
       <button>Delete</button>
     </div>
