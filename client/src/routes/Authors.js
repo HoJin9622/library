@@ -14,7 +14,7 @@ export default () => {
         alert('Failed to load authors');
       }
     });
-  }, []);
+  }, [Authors]);
 
   const onNameChange = (e) => {
     setName(e.currentTarget.value);
