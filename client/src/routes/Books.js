@@ -11,7 +11,7 @@ const BooksContainer = styled.div`
   position: relative;
 `;
 
-export default () => {
+const Books = () => {
   const [Books, setBooks] = useState([]);
   const [Title, setTitle] = useState('');
   const [AfterDate, setAfterDate] = useState('');
@@ -85,3 +85,5 @@ export default () => {
     </>
   );
 };
+
+export default React.memo(Books);

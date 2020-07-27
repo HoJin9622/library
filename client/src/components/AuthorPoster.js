@@ -1,20 +1,22 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-const AuthorPoster = (props) => {
+const AuthorPoster = ({ name, id }) => {
+  const history = useHistory();
+
   const onDelete = (e) => {
     e.preventDefault();
 
     axios
-      .delete(`/api/authors/${props.id}`, {
+      .delete(`/api/authors/${id}`, {
         params: {
-          id: props.id,
+          id: id,
         },
       })
       .then((response) => {
         if (response.data.success) {
-          props.history.push('/authors');
+          history.push('/authors');
         } else {
           alert(response.data.err);
         }
@@ -24,9 +26,9 @@ const AuthorPoster = (props) => {
   return (
     <div>
       <form onSubmit={onDelete}>
-        <div>{props.name}</div>
-        <Link to={`/authors/${props.id}`}>View</Link>
-        <Link to={`/authors/${props.id}/edit`}>Edit</Link>
+        <div>{name}</div>
+        <Link to={`/authors/${id}`}>View</Link>
+        <Link to={`/authors/${id}/edit`}>Edit</Link>
         <button type='submit' onClick={onDelete}>
           Delete
         </button>
@@ -35,4 +37,4 @@ const AuthorPoster = (props) => {
   );
 };
 
-export default withRouter(AuthorPoster);
+export default React.memo(AuthorPoster);

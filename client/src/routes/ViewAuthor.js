@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 import axios from 'axios';
 import BookPoster from '../components/BookPoster';
@@ -8,7 +8,7 @@ export default () => {
   const [Name, setName] = useState('');
   const [Books, setBooks] = useState([]);
 
-  useEffect(() => {
+  const viewAuthorApi = useCallback(() => {
     axios.get(`/api/authors/${id}`).then((response) => {
       if (response.data.success) {
         setName(response.data.author.name);
@@ -18,6 +18,10 @@ export default () => {
       }
     });
   }, [id]);
+
+  useEffect(() => {
+    viewAuthorApi();
+  }, [viewAuthorApi]);
 
   return (
     <>

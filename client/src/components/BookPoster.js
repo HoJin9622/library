@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default ({ id, title, coverImagePath }) => {
+const BookPoster = ({ id, title, coverImagePath }) => {
   return (
     <div>
       <img src={coverImagePath} alt={title} />
@@ -9,3 +9,5 @@ export default ({ id, title, coverImagePath }) => {
     </div>
   );
 };
+
+export default React.memo(BookPoster);

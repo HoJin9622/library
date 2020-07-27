@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-export default (props) => {
+const NewAuthor = () => {
+  const history = useHistory();
   const [Name, setName] = useState('');
 
   const onNameChange = (e) => {
@@ -19,9 +20,7 @@ export default (props) => {
     axios.post('/api/authors', variables).then((response) => {
       if (response.data.success) {
         alert('성공적으로 추가하였습니다.');
-        setTimeout(() => {
-          props.history.push(`/authors/${response.data.authors._id}`);
-        }, 2000);
+        history.push(`/authors/${response.data.authors._id}`);
       } else {
         alert('작가 업로드에 실패했습니다.');
       }
@@ -44,3 +43,5 @@ export default (props) => {
     </>
   );
 };
+
+export default React.memo(NewAuthor);

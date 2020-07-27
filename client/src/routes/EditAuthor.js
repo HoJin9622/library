@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, Link, useHistory } from 'react-router-dom';
 
@@ -7,16 +7,19 @@ export default () => {
   const history = useHistory();
   const [Name, setName] = useState('');
 
-  useEffect(() => {
+  const authorEditApi = useCallback(() => {
     axios.get(`/api/authors/${id}/edit`).then((response) => {
       if (response.data.success) {
-        console.log(response.data.author);
         setName(response.data.author.name);
       } else {
         alert('Failed to load');
       }
     });
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    authorEditApi();
+  }, [authorEditApi]);
 
   const onNameChange = (e) => {
     setName(e.currentTarget.value);

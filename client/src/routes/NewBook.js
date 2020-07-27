@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-export default (props) => {
+const NewBook = () => {
+  const history = useHistory();
   const [Title, setTitle] = useState('');
   const [AuthorId, setAuthorId] = useState('');
   const [Authors, setAuthors] = useState([]);
@@ -70,9 +71,7 @@ export default (props) => {
         .then((response) => {
           if (response.data.success) {
             alert('성공적으로 추가하였습니다.');
-            setTimeout(() => {
-              props.history.push(`/books/${response.data.books._id}`);
-            }, 2000);
+            history.push(`/books/${response.data.books._id}`);
           } else {
             alert('업로드에 실패하였습니다.');
           }
@@ -114,3 +113,5 @@ export default (props) => {
     </>
   );
 };
+
+export default React.memo(NewBook);

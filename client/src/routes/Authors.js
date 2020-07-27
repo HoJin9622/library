@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AuthorPoster from '../components/AuthorPoster';
 
-export default () => {
+const Author = () => {
   const [Authors, setAuthors] = useState([]);
   const [Name, setName] = useState('');
 
   /*
   Authors가 unmounted 된 상태에서 App이 Author의 변경을 주시하고 있음.
   에러 발생 부분
+  [] 에 Authors를 넣지않으면 delete 후 re render 되지않음
 */
   useEffect(() => {
     axios.get('/api/authors/').then((response) => {
@@ -18,7 +19,7 @@ export default () => {
         alert('Failed to load authors');
       }
     });
-  }, [Authors]);
+  }, []);
 
   const onNameChange = (e) => {
     setName(e.currentTarget.value);
@@ -56,3 +57,5 @@ export default () => {
     </>
   );
 };
+
+export default React.memo(Author);
