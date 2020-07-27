@@ -6,6 +6,10 @@ export default () => {
   const [Authors, setAuthors] = useState([]);
   const [Name, setName] = useState('');
 
+  /*
+  Authors가 unmounted 된 상태에서 App이 Author의 변경을 주시하고 있음.
+  에러 발생 부분
+*/
   useEffect(() => {
     axios.get('/api/authors/').then((response) => {
       if (response.data.success) {

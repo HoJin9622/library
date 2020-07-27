@@ -26,7 +26,7 @@ const AuthorPoster = (props) => {
       <form onSubmit={onDelete}>
         <div>{props.name}</div>
         <Link to={`/authors/${props.id}`}>View</Link>
-        <button>Edit</button>
+        <Link to={`/authors/${props.id}/edit`}>Edit</Link>
         <button type='submit' onClick={onDelete}>
           Delete
         </button>

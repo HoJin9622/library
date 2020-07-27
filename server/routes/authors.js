@@ -53,9 +53,9 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
-    res.render('authors/edit', { author: author });
-  } catch {
-    res.redirect('/authors');
+    res.status(200).json({ success: true, author: author });
+  } catch (err) {
+    res.status(400).json({ success: false, err });
   }
 });
 
@@ -65,12 +65,13 @@ router.put('/:id', async (req, res) => {
     author = await Author.findById(req.params.id);
     author.name = req.body.name;
     await author.save();
-    res.redirect(`/authors/${author.id}`);
-  } catch {
+    res.status(200).json({ success: true, author: author });
+  } catch (err) {
     if (author == null) {
-      res.redirect('/');
+      // author를 찾지 못했을 때
+      res.status(400).json({ success: false, err });
     } else {
-      res.render('authors/edit', {
+      res.status(400).json({
         author: author,
         errorMessage: 'Error updating Author',
       });
