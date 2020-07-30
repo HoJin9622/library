@@ -10,6 +10,7 @@ import EditAuthor from '../routes/EditAuthor';
 import NewBook from '../routes/NewBook';
 import ViewAuthor from '../routes/ViewAuthor';
 import ViewBook from '../routes/ViewBook';
+import EditBook from '../routes/EditBook';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&display=swap');
@@ -46,6 +47,7 @@ function App() {
             <Route exact path='/books' component={Books} />
             <Route exact path='/books/new' component={NewBook} />
             <Route exact path='/books/:id' component={ViewBook} />
+            <Route exact path='/books/:id/edit' component={EditBook} />
           </Switch>
         </InnerContainer>
       </Container>

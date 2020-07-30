@@ -50,7 +50,7 @@ export default () => {
     <>
       <div>{Title}</div>
       <img src={ImagePath} alt={Title} />
-      <div>Edit</div>
+      <Link to={`/books/${id}/edit`}>Edit</Link>
       <div>Delete</div>
       <Link to={`/authors/${authorId}`}>View Author</Link>
 

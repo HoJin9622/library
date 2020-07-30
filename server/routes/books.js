@@ -84,9 +84,10 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
   try {
     const book = await Book.findById(req.params.id);
-    renderEditPage(res, book);
-  } catch {
-    res.redirect('/');
+    const allAuthor = await Author.find();
+    res.status(200).json({ success: true, book, allAuthor });
+  } catch (err) {
+    res.status(400).json({ success: false, err });
   }
 });
 
