@@ -122,15 +122,12 @@ router.delete('/:id', async (req, res) => {
   try {
     book = await Book.findById(req.params.id);
     await book.remove();
-    res.redirect('/books');
+    res.status(200).json({ success: true });
   } catch {
     if (book != null) {
-      res.render('books/show', {
-        book: book,
-        errorMessage: 'Could not remove book',
-      });
+      res.status(400).json({ success: false });
     } else {
-      res.redirect('/');
+      res.status(400).json({ success: false });
     }
   }
 });

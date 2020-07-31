@@ -1,8 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory } from 'react-router-dom';
 
 export default () => {
+  const history = useHistory();
   const { id } = useParams();
   const [Title, setTitle] = useState('');
   const [ImagePath, setImagePath] = useState('');
@@ -46,13 +47,33 @@ export default () => {
     viewBookApi();
   }, [viewBookApi]);
 
+  const onDelete = (e) => {
+    e.preventDefault();
+
+    axios
+      .delete(`/api/books/${id}`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((response) => {
+        if (response.data.success) {
+          history.push('/books');
+        } else {
+          alert(response.data.err);
+        }
+      });
+  };
+
   return (
     <>
-      <div>{Title}</div>
-      <img src={ImagePath} alt={Title} />
-      <Link to={`/books/${id}/edit`}>Edit</Link>
-      <div>Delete</div>
-      <Link to={`/authors/${authorId}`}>View Author</Link>
+      <form onSubmit={onDelete}>
+        <div>{Title}</div>
+        <img src={ImagePath} alt={Title} />
+        <Link to={`/books/${id}/edit`}>Edit</Link>
+        <button onClick={onDelete}>Delete</button>
+        <Link to={`/authors/${authorId}`}>View Author</Link>
+      </form>
 
       <article>
         <div>Author:{Name}</div>
